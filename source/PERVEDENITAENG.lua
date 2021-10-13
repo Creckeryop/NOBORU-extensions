@@ -86,7 +86,7 @@ function PervEdenIt:prepareChapter(chapter, dest_table)
 	local content = downloadContent(self.Link .. "/api/chapter/" .. chapter.Link):match('images"(.-)$')
 	local t = {}
 	for link in content:gmatch('"(%S-)"') do
-		t[#t + 1] = "cdn." .. self.Site .. ".com/mangasimg/" .. link
+		t[#t + 1] = "cdn.perveden.com/mangasimg/" .. link
 	end
 	for i = #t, 1, -1 do
 		dest_table[#dest_table + 1] = t[i]
@@ -109,12 +109,12 @@ Extensions.Register(
 		Link = "http://www.perveden.com",
 		Language = {"ENG", "ITA"},
 		ID = "PERVEDENITAENG",
-		Version = 1,
+		Version = 2,
 		NSFW = true,
 		Parsers = {
 			PervEdenEn,
 			PervEdenIt
 		},
-		LatestChanges = "Added PervEden site as extension"
+		LatestChanges = "Fixed images parser"
 	}
 )
