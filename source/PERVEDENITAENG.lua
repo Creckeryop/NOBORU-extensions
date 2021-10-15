@@ -97,7 +97,7 @@ function PervEdenIt:loadChapterPage(link, dest_table)
 	dest_table.Link = link
 end
 
-PervEdenEn = PervEdenIt:new("PervEden", "https://www.perveden.com", "ENG", "PVEDENENG", "PERVEDENITAENG")
+PervEdenEn = PervEdenIt:new("PervEden", "http://www.perveden.com", "ENG", "PVEDENENG", "PERVEDENITAENG")
 PervEdenEn.NSFW = true
 PervEdenEn.API = "/api/list/0/"
 
@@ -109,12 +109,12 @@ Extensions.Register(
 		Link = "http://www.perveden.com",
 		Language = {"ENG", "ITA"},
 		ID = "PERVEDENITAENG",
-		Version = 2,
+		Version = 3,
 		NSFW = true,
 		Parsers = {
 			PervEdenEn,
 			PervEdenIt
 		},
-		LatestChanges = "Fixed images parser"
+		LatestChanges = "Made Perveden English works"
 	}
 )
