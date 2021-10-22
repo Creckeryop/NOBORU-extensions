@@ -244,7 +244,7 @@ function NudeMoon:searchManga(data, page, dt, tags)
 	local stext = {}
 	if data == "" and tags and #tags > 0 and #tags[1] > 0 then
 		local search = ""
-		for k, v in pairs(tags[1]) do
+		for _, v in pairs(tags[1]) do
 			search =
 				search ..
 				self.Keys[v]:gsub(" ", "_"):gsub(
@@ -258,11 +258,7 @@ function NudeMoon:searchManga(data, page, dt, tags)
 		self:getManga(self.Link .. "/tags/" .. search .. "&rowstart=" .. ((page - 1) * 30), dt)
 	else
 		for c in it_utf8(data) do
-			if utf8ascii[c] then
-				stext[#stext + 1] = utf8ascii[c]
-			else
-				stext[#stext + 1] = c
-			end
+			stext[#stext + 1] = utf8ascii[c] or c
 		end
 		stext = table.concat(stext)
 		self:getManga(self.Link .. "/search?stext=" .. stext .. "&rowstart=" .. ((page - 1) * 30), dt, tags)
@@ -275,38 +271,19 @@ function NudeMoon:getChapters(manga, dt)
 	if link then
 		local t = {}
 		self:getManga(self.Link .. link, t)
-		for i = #t, 1, -1 do
-			local m = t[i]
-			dt[#dt + 1] = {
-				Name = stringify(m.Name),
-				Link = m.Link:gsub("^(/%d*)", "%1-online"),
-				Pages = {},
-				Manga = manga
-			}
+		for i = 1, #t do
+			dt[#dt + 1] = CreateChapter(manga, stringify(t[i].Name), t[i].Link:gsub("^(/%d*)", "%1-online"))
 		end
 	else
-		dt[#dt + 1] = {
-			Name = stringify(manga.Name),
-			Link = manga.Link:gsub("^(/%d*)", "%1-online"),
-			Pages = {},
-			Manga = manga
-		}
+		dt[#dt + 1] = CreateChapter(manga, stringify(manga.Name), manga.Link:gsub("^(/%d*)", "%1-online"))
 	end
 end
 
 function NudeMoon:prepareChapter(chapter, dt)
 	local content = downloadContent(self.Link .. chapter.Link .. "?page=1")
 	for link in content:gmatch("images%[%d-%].src = '(.-)';") do
-		if link:find("^https") then
-			dt[#dt + 1] = link
-		else
-			dt[#dt + 1] = self.Link .. link
-		end
+		dt[#dt + 1] = link:find("^https") and link or (self.Link .. link)
 	end
-end
-
-function NudeMoon:loadChapterPage(link, dt)
-	dt.Link = link
 end
 
 Extensions.Register(
@@ -314,14 +291,14 @@ Extensions.Register(
 	{
 		Type = "Parsers",
 		Name = "Nude-Moon",
-		Link = "https://nude-moon.net",
+		Link = "https://nude-moon.net/",
 		Language = "RUS",
 		ID = "NUDEMOONRU",
-		Version = 1,
+		Version = 2,
 		NSFW = true,
 		Parsers = {
 			NudeMoon
 		},
-		LatestChanges = "Added Nude-Moon site as extension"
+		LatestChanges = "Fixed Nude-Moon chapter numeration"
 	}
 )

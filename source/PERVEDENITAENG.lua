@@ -93,10 +93,6 @@ function PervEdenIt:prepareChapter(chapter, dest_table)
 	end
 end
 
-function PervEdenIt:loadChapterPage(link, dest_table)
-	dest_table.Link = link
-end
-
 PervEdenEn = PervEdenIt:new("PervEden", "http://www.perveden.com", "ENG", "PVEDENENG", "PERVEDENITAENG")
 PervEdenEn.NSFW = true
 PervEdenEn.API = "/api/list/0/"
@@ -106,7 +102,7 @@ Extensions.Register(
 	{
 		Type = "Parsers",
 		Name = "PervEden",
-		Link = "http://www.perveden.com",
+		Link = {"http://www.perveden.com/eng/", "http://www.perveden.com/it/"},
 		Language = {"ENG", "ITA"},
 		ID = "PERVEDENITAENG",
 		Version = 3,
